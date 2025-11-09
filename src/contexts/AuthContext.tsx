@@ -25,22 +25,22 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   // Verificar se usuário está autenticado ao carregar
   useEffect(() => {
-    const loadUser = async () => {
+    const loadUser = () => {
       const token = localStorage.getItem('token');
+      const storedUser = localStorage.getItem('user');
       
-      if (!token) {
+      if (!token || !storedUser) {
         setLoading(false);
         return;
       }
 
       try {
-        const response = await apiService.getMe();
-        if (response.success) {
-          setUser(response.data);
-        }
+        const userData = JSON.parse(storedUser);
+        setUser(userData);
       } catch (err) {
         console.error('Erro ao carregar usuário:', err);
         localStorage.removeItem('token');
+        localStorage.removeItem('user');
       } finally {
         setLoading(false);
       }
@@ -58,6 +58,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       
       if (response.success) {
         setUser(response.data.user);
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('user', JSON.stringify(response.data.user));
       }
     } catch (err: any) {
       const errorMessage = err.response?.data?.message || 'Erro ao fazer login';
@@ -77,6 +79,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       
       if (response.success) {
         setUser(response.data.user);
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('user', JSON.stringify(response.data.user));
       }
     } catch (err: any) {
       const errorMessage = err.response?.data?.message || 'Erro ao registrar';
