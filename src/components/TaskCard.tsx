@@ -16,12 +16,6 @@ const priorityColors = {
   urgent: '#9c27b0',
 };
 
-const statusLabels = {
-  pending: 'Pendente',
-  'in-progress': 'Em Progresso',
-  completed: 'Concluída',
-  archived: 'Arquivada',
-};
 
 export const TaskCard: React.FC<TaskCardProps> = ({
   task,
